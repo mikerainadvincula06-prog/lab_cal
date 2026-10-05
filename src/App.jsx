@@ -1,166 +1,50 @@
-import { useState } from "react"
+import { useState } from "react";
 
-function App() {
-  const [display, setDisplay] = useState("0")
-  const [firstNumber, setFirstNumber] = useState(null)
-  const [operator, setOperator] = useState("")
+export default function App() {
+  const [input, setInput] = useState("");
 
-  const numberClick = (number) => {
-    if (display === "0") {
-      setDisplay(number)
-    } else {
-      setDisplay(display + number)
-    }
-  }
-
-  const operatorClick = (op) => {
-    setFirstNumber(Number(display))
-    setOperator(op)
-    setDisplay("0")
-  }
+  const handleClick = (value) => {
+    setInput(input + value);
+  };
 
   const calculate = () => {
-    const secondNumber = Number(display)
-    let answer = 0
-
-    if (operator === "+") {
-      answer = firstNumber + secondNumber
+    try {
+      setInput(eval(input).toString());
+    } catch {
+      setInput("Error");
     }
-
-    if (operator === "-") {
-      answer = firstNumber - secondNumber
-    }
-
-    if (operator === "×") {
-      answer = firstNumber * secondNumber
-    }
-
-    if (operator === "÷") {
-      if (secondNumber === 0) {
-        setDisplay("Error")
-        return
-      }
-
-      answer = firstNumber / secondNumber
-    }
-
-    setDisplay(String(answer))
-    setFirstNumber(null)
-    setOperator("")
-  }
+  };
 
   const clear = () => {
-    setDisplay("0")
-    setFirstNumber(null)
-    setOperator("")
-  }
+    setInput("");
+  };
 
   return (
-    <div className="min-h-screen bg-gray-200 p-5">
+    <div className="h-screen flex items-center justify-center bg-gray-200">
+      <div className="bg-white p-5 rounded shadow w-64">
+        <h1 className="text-center text-xl mb-2">Calculator</h1>
 
-      <div className="mx-auto max-w-sm rounded-xl bg-gray-800 p-5">
-
-        <h1 className="mb-4 text-center text-2xl font-bold text-white">
-          Calculator
-        </h1>
-
-        <div className="mb-4 rounded-lg bg-white p-4 text-right text-3xl font-bold">
-          {display}
-        </div>
+        <input
+          className="w-full p-2 mb-3 border text-right"
+          value={input}
+          readOnly
+        />
 
         <div className="grid grid-cols-4 gap-2">
+          {"1234567890+-*/".split("").map((item) => (
+            <button
+              key={item}
+              onClick={() => handleClick(item)}
+              className="p-2 bg-blue-400 text-white rounded"
+            >
+              {item}
+            </button>
+          ))}
 
-          <button
-            onClick={clear}
-            className="rounded-lg bg-red-500 p-4 text-xl text-white"
-          >
-            C
-          </button>
-
-          <button
-            onClick={() => operatorClick("÷")}
-            className="rounded-lg bg-orange-500 p-4 text-xl text-white"
-          >
-            ÷
-          </button>
-
-          <button
-            onClick={() => operatorClick("×")}
-            className="rounded-lg bg-orange-500 p-4 text-xl text-white"
-          >
-            ×
-          </button>
-
-          <button
-            onClick={() => operatorClick("-")}
-            className="rounded-lg bg-orange-500 p-4 text-xl text-white"
-          >
-            -
-          </button>
-
-          <button onClick={() => numberClick("7")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            7
-          </button>
-
-          <button onClick={() => numberClick("8")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            8
-          </button>
-
-          <button onClick={() => numberClick("9")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            9
-          </button>
-
-          <button
-            onClick={() => operatorClick("+")}
-            className="rounded-lg bg-orange-500 p-4 text-xl text-white"
-          >
-            +
-          </button>
-
-          <button onClick={() => numberClick("4")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            4
-          </button>
-
-          <button onClick={() => numberClick("5")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            5
-          </button>
-
-          <button onClick={() => numberClick("6")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            6
-          </button>
-
-          <button
-            onClick={calculate}
-            className="row-span-2 rounded-lg bg-blue-500 p-4 text-xl text-white"
-          >
-            =
-          </button>
-
-          <button onClick={() => numberClick("1")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            1
-          </button>
-
-          <button onClick={() => numberClick("2")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            2
-          </button>
-
-          <button onClick={() => numberClick("3")} className="rounded-lg bg-gray-600 p-4 text-xl text-white">
-            3
-          </button>
-
-          <button
-            onClick={() => numberClick("0")}
-            className="col-span-3 rounded-lg bg-gray-600 p-4 text-xl text-white"
-          >
-            0
-          </button>
-
+          <button onClick={clear} className="bg-red-400 p-2 col-span-2 rounded">C</button>
+          <button onClick={calculate} className="bg-green-400 p-2 col-span-2 rounded">=</button>
         </div>
-
       </div>
-
     </div>
-  )
+  );
 }
-
-export default App
